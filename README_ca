@@ -1,0 +1,91 @@
+Introducció a Yamwi
+====================
+Versió: 20250205
+
+1. Objectiu
+ ---------
+
+Yamwi (Yet Another Maxima Web Interface) és un entorn web, basat en Linux+Apache+Php, per al programa de càlcul simbòlic i numèric Maxima (maxima.sourceforge.net).
+
+Maxima és la versió lliure (GPL) del sistema Macsyma desenvolupat a Lisp al MIT durant els 70; altres programes similars (Mathematica, Maple) s'hi van inspirar als 80. L'any 2000 va ser allotjat als repositoris de Sourceforge i actualment es manté amb l'aportació desinteressada d'un equip internacional de programadors. Donades les rutines avançades de què disposa, Maxima també es fa servir en els àmbits de la investigació i tècnic professional.
+
+Yamwi és d'interès a l'àmbit educatiu, per fer activitats interactives a través del navegador, o per mostrar conceptes matemàtics (Matemàtiques, Física, Química, Tecnoloxia). Qualsevol tipus de càlcul o gràfic es podrà fer a través del web amb Yamwi.
+
+
+
+2. Requisits
+ ----------
+
+El sistema operatiu en què es desenvolupa Yamwi és Linux.
+
+Programari necessari a la part del servidor:
+
+* Apache (http://www.apache.org). (Veure. >= 2).
+* Php (http://www.php.net). (Veure. >= 5).
+* Gnuplot (http://www.gnuplot.info). És el programa que Maxima utilitza per a la realització de gràfics. (Vegeu >= 4.2).
+* Maxima (http://maxima.sourceforge.net). És el motor matemàtic. (Veure. >= 5.20).
+* timelimit
+
+En cas que l'administrador vulgui que els resultats es tornin en format TeX binari, cal tenir instal·lats també els següents
+paquets (vegeu la variable de configuració '$mode' més avall):
+
+* dvips (de LaTex)
+* texi2dvi (de texinfo)
+*convert (d'ImageMagick)
+
+
+
+
+3. Instal·lació
+ -----------
+
+La posada a punt de Yamwi, una vegada instal·lats els programes anteriors, només consisteix a allotjar els fitxers necessaris en una carpeta a la qual tingui accés Apache.
+
+Els fitxers requerits per a la instal·lació de Yamwi es troben a l'adreça
+http://sourceforge.net/projects/yamwi/files
+
+A continuació es descriu el procés d'instal·lació:
+(és possible que siguin necessaris privilegis d'administrador)
+
+1.- Un cop descarregat el fitxer yamwi-yy.mm.tar.gz del projecte, on yy és l'any de l'alliberament i mm el mes, es porta a una
+ carpeta a què Apache tingui accés; una vegada aquí, es descomprimeix:
+
+ tar -xvf yamwi-yy.mm.tar.gz
+
+ de manera que es crearà la carpeta 'yamwi'.
+
+2.- S'executa l'script INSTALL, el qual dóna a les carpetes i fitxers els permisos necessaris. A més, crea la carpeta tmp que guardarà els fitxers temporals que es crearan durant l'execució de les interfícies:
+
+ sh yamwi/INSTALL
+
+3.- La instal·lació està completa, per posar a prova les donem només cal escriure al navegador:
+
+ http://localhost/ruta_a_carpeta/yamwi
+
+ on ruta_a_carpeta no serà necessari si Yamwi s'instal·la al directori arrel d'Apache.
+
+Al fitxer 'yamwi.php', gairebé al començament, hi ha una secció destinada a configurar alguns aspectes de la interfície:
+
+'$mode': 0, 1, 2, 3 o 4. Quan valgui 0, Yamwi mostrarà els resultats a ASCII Art; quan valgui 1, els resultats es mostraran com a fitxers binaris amb format TeX (comprovar que els programes texi2dvi, dvips i convert estan instal·lats); quan valgui 2, els resultats es mostren a ASCII Art millorat, que és més fàcil de llegir que el mode 0; quan valgui 3, els resultats es tornen com a expressions sintàctiques de Maxima; quan valgui 4, els resultats es basen en el sistema MathJax (http://www.mathjax.org). Té el valor 2 per defecte. Els temps de resposta és menor en els modes ASCII Art.
+
+'$max_file_time': Yamwi genera alguns fitxers que va emmagatzemant a la carpeta 'tmp'. Cada vegada que un usuari sol·licita un càlcul, Yamwi elimina de la carpeta 'tmp' aquells fitxers que tinguin una antiguitat en minuts més gran que la indicada per la variable '$max_inactive_time', que per defecte és d'1 min.
+
+'$max_process_time': és el temps màxim d'execució per a cada procés que s'obri de Maxima. El valor per defecte és de 120 segons.
+
+'$max_num_processes': és el nombre màxim de processos Maxima oberts de forma simultània. El valor per defecte és 30.
+
+
+
+4. Paquets addicionals
+ --------------------
+
+Yamwi dóna accés a tots els paquets estàndard de Maxima. En cas de necessitats especials, es poden afegir a la carpeta 'packages' altres de nous, ja sigui amb l'extensió 'mac', si estan escrits al codi de Maxima, bé amb l'extensió 'lisp', si estan escrits a Common Lisp. Els visitants podran trucar a les funcions definides en aquests paquets utilitzant la instrucció load. Vegeu el fitxer d'ajuda help_ca.html.
+
+
+
+5. Seguretat
+ ----------
+
+Aquest programa s'ha d'utilitzar amb compte. Per evitar danys al servidor, s'han dissenyat algunes barreres:
+
+* Hi ha una llista de termes perillosos per evitar que codi sospitós escrit per l'usuari passi a Maxima. Vegeu la variable g
