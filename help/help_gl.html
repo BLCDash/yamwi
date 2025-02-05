@@ -1,0 +1,552 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <link rel="stylesheet" media="all" href="help.css">
+  <title>Sistema de axuda de Yamwi en liña</title>
+</head>
+
+<body>
+
+
+<h1>Sistema de axuda de Yamwi en liña</h1>
+
+
+
+<h2>Introdución</h2>
+
+<p>
+Esta páxina <i>web</i> permite facer todo tipo de cálculos matemáticos e gráficos en liña.
+</p>
+
+<p>
+Para facer un cálculo calquera tan só é necesario escribir no cadro o código correspondente e a continuación premer no botón que está debaixo.
+</p>
+
+<p>
+Os exemplos que se inclúen nesta páxina pódense copiar e pegar (CTRL-C e CTRL-V) na área de edición antes de premer no botón. O usuario pode facer os cambios que queira nesta área.
+</p>
+
+<p>
+A axuda desta páxina é moi precaria e básica. Para afondar máis:
+</p>
+
+<ul>
+<li>Aula virtual: <a href="http://centros.edu.xunta.es/iespuntacandieira/moodle/course/view.php?id=14">Cálculo Simbólico e Numérico con Maxima</a>. (En galego.)</li>
+<li>Referencia oficial: <a href="http://maxima.sourceforge.net/docs/manual/es/maxima.html" target="_blank">Manual de Maxima</a>. (En castelán.)</li>
+<li>Tutorial: <a href="http://www.telefonica.net/web2/biomates/maxima/max.pdf">Primeros pasos en Maxima</a>. (En castelán.)</li>
+<li>Dende a páxina oficial: <a href="http://maxima.sourceforge.net/es/documentation.html" target="_blank">Máis titoriais</a>. (Varias linguas.)</li>
+</ul>
+
+<p>
+A información que imos obter ten aspecto de conversación. As nosas peticións levan sempre a etiqueta <b>%i</b> seguida dun número (<b>i</b> de <i>input</i>) e os resultados levan a etiqueta <b>%o</b> seguida do correspondente número de orde (<b>o</b> de <i>output</i>).
+</p>
+
+
+
+
+
+<hr>
+<h2>Contido</h2>
+
+<ul>
+<li><a href="#operacions">Operacións numéricas</a></li>
+<li><a href="#alxebra">Álxebra</a></li>
+<li><a href="#ecuacions">Ecuacións</a></li>
+<li><a href="#calculo">Cálculo infinitesimal</a></li>
+<li><a href="#matrices">Cálculo matricial</a></li>
+<li><a href="#graficos">Gráficos</a></li>
+<li><a href="#estatistica">Estatística</a></li>
+<li><a href="#paquetes">Paquetes de usuario</a>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<h2 id="operacions">Operacións numéricas</h2>
+
+<p>
+Maxima sempre evita traballar con cantidades aproximadas. Co seguinte código operamos con fraccións. Cada instrucción debe rematar cun punto e coma (<b>;</b>).
+</p>
+
+<pre>
+1 + 5 * (5 - 7/9)^4 ;
+</pre>
+
+<p>
+Se queremos a aproximación decimal dun resultado podemos proceder como segue: primeiro gardamos (cos dous puntos <b>:</b>) nunha variable (neste caso <b>x</b>) o valor da expresión exacta e despois executamos a función <b>float</b> para que a transforme en decimal.
+</p>
+
+<pre>
+x : 1 + 5 * (5 - 7/9)^4 ;
+float(x);
+</pre>
+
+<p>
+O mesmo resultado se pode acadar cunha soa instrucción.
+</p>
+
+<pre>
+float (1 + 5 * (5 - 7/9)^4) ;
+</pre>
+
+<p>
+Outro exemplo onde se ve o uso de variables. O que se escribe entre os símbolos <b>/*</b> e <b>*/</b> son comentarios para os humanos, sendo ignorados pola máquina, polo que este exemplo é autoexplicativo.
+</p>
+
+<pre>
+/* Gardamos un valor na variable 'a' */
+a : 8 / 24;
+
+/* Gardamos outro valor na variable 'b' */
+b: 1/5 ;
+
+/* O cadrado da suma de 'a' e 'b' */
+(a + b)^2;
+</pre>
+
+<p>
+A función <b>float</b> devolve un número limitado de decimais. Vexamos como pedir o número &pi; con cinco mil decimais. Para iso debemos indicarlle á variable global <b>fpprec</b> a precisión desexada e despois facer unha chamada á función <b>bfloat</b>. Convén lembrar que &pi; se representa en Maxima por <b>%pi</b>. Tamén calculamos a raíz cadrada de 2 con 5000 cifras decimais.
+</p>
+
+<pre>
+fpprec : 5000;
+bfloat(%pi);
+
+/* Tamen queremos a raiz cuadrada de dous */
+bfloat( sqrt(2) );
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<h2 id="alxebra">Álxebra</h2>
+
+<p>
+Da mesma maneira que podemos operar con números podemos facelo con variables. Fíxate como se reducen as expresións alxébricas.
+</p>
+
+<pre>
+1 + x + 5 * y - 2/3 * x + y + 2 ;
+
+(5*x^2 * u * r) / (u^2 * t) ;
+</pre>
+
+<p>
+Expandimos produtos.
+</p>
+
+<pre>
+expand( (x+1)^2 * (x+5) * (x-a) ) ;
+</pre>
+
+
+<p>
+Factorizamos polinomios.
+</p>
+
+<pre>
+factor(u^6 - 14*u^5 - 23*u^4 + 808*u^3 - 320*u^2 - 12800*u) ;
+</pre>
+
+<p>
+Se queremos calcular o valor numérico dunha expresión alxébrica, faremos uso da función <b>subst</b> tal como se indica a continuación, onde gardamos na variable <b>f</b> a fórmula para a forza de atracción gravitatoria e a calculamos para diferentes masa e distancias. O uso dos corchetes (<b>[</b> e <b>]</b>) en Maxima é moi común, xa que con eles podemos construir listas e calesqueira outras estruturas de datos.
+</p>
+
+<pre>
+f : 6.67 * 10^-11 * m1 * m2 / r^2 ;
+
+subst([m1 = 4, m2 = 5, r = 7], f) ;
+subst([m1 = mass, m2 = mass], f) ;
+</pre>
+
+<p>
+Para obter información sobre algunha das funcións ou variables globais de Maxima cómpre facer uso de <b>describe</b>.
+</p>
+
+<pre>
+describe(subst);
+</pre>
+
+
+
+
+
+
+
+
+
+<hr>
+<h2 id="ecuacions">Ecuacións</h2>
+
+<p>
+En xeral, a función a utilizar é <b>solve</b>. Necesitará dous argumentos: o primeiro será unha lista de ecuacións separadas por comas, e o segundo a lista de incógnitas.
+</p>
+
+
+
+<p>
+Unha sinxela ecuación de primeiro grao.
+</p>
+
+<pre>
+solve([5 * (x + 1/2) = 1 + x /3], [x]) ;
+</pre>
+
+<p>
+A mesma ecuación pero cunha constante.
+</p>
+
+<pre>
+solve([5 * (x + 1/2) = k + x /3], [x]) ;
+</pre>
+
+<p>
+Unha ecuación polinómica de segundo grao. Recorda que a raíz cuadrada se representa en Maxima por <b>sqrt</b> e a unidade imaxinaria por <b>%i</b>.
+</p>
+
+<pre>
+solve([2*x^2 - 3*x + 5 = 0], [x]) ;
+</pre>
+
+<p>
+Un sistema de ecuacións. Vemos neste exemplo que podemos facer uso de varias liñas para escribir unha sentencia. Tamén pedimos o resultado en formato decimal.
+</p>
+
+<pre>
+sol : solve([5*x + y/8 = 4, x^2 = y],
+            [x,y]) ;
+
+float(sol);
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<h2 id="calculo">Cálculo infinitesimal</h2>
+
+<p>
+O cálculo de límites faise coa función <b>limit</b>. 
+</p>
+
+<p>
+Empezamos por uns límites moi sinxelos. O infinito represéntase por <b>inf</b> e o menos infinito por <b>minf</b>.
+</p>
+
+<pre>
+limit( (x-1) / (2*x + 3), x, 1);
+
+limit( (x-1) / (2*x + 3), x, inf);
+</pre>
+
+<p>
+Límites pola esquerda e pola dereita.
+</p>
+
+<pre>
+limit( 1 / (x-1), x, 1, minus);
+
+limit( 1 / (x-1), x, 1, plus);
+</pre>
+
+<p>
+Exemplo de cálculo de derivadas de varios ordes.
+</p>
+
+<pre>
+fun : sin(x) * x^4 ;
+
+diff( fun, x);
+
+/* terceira derivada */
+diff( fun, x, 3);
+</pre>
+
+<p>
+Unha integral indefinida e outra definida. Nótese que o símbolo <b>%e</b> representa a base dos logaritmos naturais.
+</p>
+
+<pre>
+integrate(sin (2 + 3 * x), x) ;
+
+integrate( x * exp(x), x, 1, 2) ;
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<h2 id="matrices">Cálculo matricial</h2>
+
+<p>
+As matrices pódense introducir de varios xeitos. O máis frecuente é facer uso da función <b>matrix</b> declarando as filas. Neste exemplo introdúcense dúas matrices para despois sumalas e restalas.
+</p>
+
+<pre>
+a : matrix([1, 2, 3], [4, 5, 6]) ;
+b : matrix([7, 1/9, 2], [z, x+y, -5]) ;
+
+a + b ;
+a - b ;
+</pre>
+
+<p>
+O produto matricial indícase co punto (<b>.</b>), non co asterisco.
+</p>
+
+<pre>
+a : matrix([1, 2, 3], [4, 5, 6]) ;
+b : matrix([7, 1/9], [z, -5], [1, 0]) ;
+
+a . b ;
+</pre>
+
+<p>
+Outra particularidade é que o cálculo da potencia dunha matriz indícase mediante o doble acento circunflexo.
+</p>
+
+<pre>
+a : matrix([1, 2, 3], [4, 5, 6], [7, 8, 9]) ;
+a^^3 ;
+</pre>
+
+<p>
+Outras operacións con matrices.
+</p>
+
+<pre>
+a : matrix([1, 4, 3], [7, 5, 6], [3, 8, 9]) ;
+
+/* Matriz inversa */
+invert(a) ;
+
+/* Matriz trasposta */
+transpose(a) ;
+
+/* Determinante */
+determinant(a) ;
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<h2 id="graficos">Gráficos</h2>
+
+<p>
+A mellor referencia para aprender a facer gráficos con Maxima é o documento <a href="http://riotorto.users.sf.net/gpdraw">A Maxima-Gnuplot interface</a>, que contén multitude de exemplos que se poden copiar e pegar no formulario. O manual de Maxima tamén ten unha sección adicada ós gráficos.
+</p>
+
+<p>
+En Yamwi, a función para debuxar gráficos no plano é <b>draw2d</b>. Yamwi non executa a función gráfica <b>plot2d</b>, pero <b>wxdraw2d</b> tamén se acepta.
+</p>
+
+<p>
+En primeiro lugar imos representar unha función explícita de cor vermella sobre o plano.
+</p>
+
+<pre>
+draw2d (
+  color = red,
+  explicit(x^3-2*x^2+x-1, x, -3, 3) ) ;
+</pre>
+
+<p>
+Imos engadirlle unha cuadrícula que faga máis doada a interpretación do gráfico. Ademáis, incorporamos á escena unha función paramétrica de trazo vermello algo máis groso.
+</p>
+
+<pre>
+draw2d (
+  explicit(x^3-2*x^2+x-1, x, -3, 3),
+  grid = true,
+  color = red,
+  line_width = 4,
+  parametric(sin(t), t^2, t, -2*%pi, 2*%pi) ) ;
+</pre>
+
+<p>
+Tamén podemos facer gráficos en 3D. Neste caso a función a utilizar é <b>draw3d</b>.
+</p>
+
+<pre>
+draw3d(
+  surface_hide = true,
+  explicit(20*exp(-x^2-y^2)-10,x,-3,3,y,-3,3));
+</pre>
+
+<p>
+Por último, un exemplo de animación.
+</p>
+
+<pre>
+draw(terminal   = animated_gif,
+     delay      = 40,
+     dimensions = [300,300],
+     makelist(gr2d(explicit(x^(k/10),x,0,1)), k, 1, 10) ) $
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<h2 id="estatistica">Estatística</h2>
+
+<p>
+As funcións estatísticas están definidas nun ficheiro de nome <b>descriptive</b>, polo que hai que invocalo antes de facer uso delas.
+</p>
+
+<p>
+Os gráficos estatísticos definidos no paquete <b>descriptive</b> débense escribir coa pimeira letra en maiúscula: <b>Scatterplot</b>, <b>Histogram</b>, <b>Barsplot</b>, <b>Piechart</b>, <b>Boxplot</b> e <b>Starplot</b>.
+</p>
+
+<p>
+Neste exemplo, a partir dunha serie de datos calculamos algúns parámetros estatísticos e xeramos a partir deles un diagrama de sectores.
+<p>
+
+<pre>
+load(descriptive) $
+mostra :
+  [4, 7, 6, 1, 5, 10, 3, 6, 6, 6, 9, 9, 5, 2,
+   2, 7, 7, 4, 6, 7, 8, 4, 10, 10, 4] $
+
+/* media */
+mean(mostra) ;
+
+/* mediana */
+median(mostra) ;
+
+/* desviacion tipica */
+std(mostra) ;
+
+/* diagrama de sectores */
+Piechart(mostra) $
+</pre>
+
+<p>
+No caso dunha mostra bivariante, os pares debemos introducilos como unha matriz de dúas columnas. A partir de aí podemos xerar varios resultados.
+</p>
+
+<pre>
+load(descriptive) $
+mostra:
+  matrix(
+    [125.1,140.7], [130.6,155.1], [135.1,160.3],
+    [140.0,167.2], [145.4,169.8], [142.7,168.5])$
+
+/* vector de medias */
+mean(mostra) ;
+
+/* matriz de covarianzas */
+cov(mostra) ;
+
+/* matriz de correlacions */
+cor(mostra) ;
+
+/* grafico de dispersion */
+draw2d(
+   point_type = circle,
+   point_size = 3,
+   color = navy,
+   points(mostra)) $
+</pre>
+
+
+
+
+
+
+
+
+
+
+
+
+<hr>
+<h2 id="paquetes">Paquetes de usuario</h2>
+
+<p>
+É posible solicitarlle ó administrador de Yamwi que inclúa novos paquetes de usuario no sistema, de xeito que o código estea sempre accesible para ser utilizado dende cualquera lugar. Aquí hai un exemplo dun paquete de usuario.</p>
+
+<p>O paquete <b>mypackage.mac</b> está instalado no cartafol <b>yamwi/packages</b>. Non esquecer de chamar á función <b>load</b> antes de facer os cálculos.</p>
+
+<p>
+Este é un exemplo de cálculo que se pode preparar con esta ferramenta. Trátase dunha función chamada <b>trajectory</b> que admite catro argumentos:
+</p>
+
+<ol>
+<li>Velocidade inicial dun proxectil, en m/s.</li>
+<li>Altura dende a que se fai o disparo, en m.</li>
+<li>Ángulo de disparo medido dende a horizontal, en graos, dende 0 ata 90.</li>
+<li>Astro dende cuxa superficie se fai o lanzamento (T, Terra; L, Lúa; S, Sol; M, Marte; X, Xúpiter).</li>
+</ol>
+
+<p>
+Neste exemplo, un proxectil é lanzado dende a superficie de Marte a nivel do chan, cunha velocidade de 35 m/s e ángulo de 47 graos.
+</p>
+
+<p>
+O resultado que devolve a función <b>trajectory</b> contén a aceleración da gravidade, a ecuación da parábola correspondente, o alcance e a altura máxima, así como un gráfico que simula a traxectoria.
+</p>
+
+<pre>
+load("mypackage") $
+trajectory(35, 0, 47, M) ;
+</pre>
+
+
+</body>
+</html>
